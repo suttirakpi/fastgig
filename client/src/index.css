@@ -1,111 +1,476 @@
+@import url("https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap");
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
+  --purple: #6e5a9b;
+  --purple-dark: #4b3a78;
+  --purple-deep: #2c1f5a;
+  --accent: #9d6bff;
+  --gold: #e8c547;
+  --bg: #f3f2f7;
+  --card: #ffffff;
+  --text: #2b2540;
+  --muted: #7b7691;
+  --line: #ddd9e8;
+  --danger: #e5484d;
+  --ok: #22a559;
+  --radius: 14px;
+  color-scheme: light;
+  font-family: "Prompt", system-ui, "Segoe UI", Tahoma, sans-serif;
   color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+* {
   box-sizing: border-box;
 }
-
+html,
+body,
+#root {
+  min-height: 100%;
+}
 body {
   margin: 0;
+  background: #d9d6e5;
 }
-
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
 h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
+h2,
+h3 {
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+/* ---------- โครงหน้า (กรอบมือถือ) ---------- */
+.app-shell {
+  position: relative;
+  max-width: 430px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: var(--bg);
+  box-shadow: 0 0 40px rgba(44, 31, 90, 0.18);
+}
+.page {
+  padding-bottom: 92px;
+}
+.center-screen {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
 }
 
-code {
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 18px 16px;
+  background: var(--purple);
+  color: #fff;
+  border-radius: 0 0 24px 24px;
+}
+.page-header h1 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 430px);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  background: var(--purple);
+  border-radius: 22px 22px 0 0;
+  z-index: 10;
+}
+.nav-item {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+}
+.nav-item svg {
+  width: 22px;
+  height: 22px;
+}
+.nav-item.active {
+  background: var(--purple-deep);
+}
+
+/* ---------- ปุ่ม / ฟอร์ม ---------- */
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 16px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn-block {
+  width: 100%;
+}
+.btn-small {
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 8px;
+}
+.link-btn {
+  background: none;
+  border: 0;
+  color: var(--purple);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 8px;
+}
+.chip-btn {
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.chip-btn.danger {
+  background: var(--danger);
+}
+
+.form {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+.field {
+  display: grid;
+  gap: 4px;
+}
+.field label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--purple-dark);
+}
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text);
+  outline: none;
+}
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(157, 107, 255, 0.2);
+}
+textarea.input {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.alert {
+  background: #fdecec;
+  color: #b42318;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.notice {
+  background: #ece6ff;
+  color: var(--purple-dark);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+  text-align: center;
+}
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px 16px;
+}
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ---------- Login / Register ---------- */
+.auth-shell {
+  background: var(--purple);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px 24px;
+}
+.auth-shell .form {
+  padding: 0;
+}
+.auth-shell .field label {
+  color: #fff;
+}
+.logo {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.logo-mark {
+  display: inline-block;
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fff;
+  border-bottom: 2px solid #fff;
+  padding-bottom: 4px;
+}
+.logo-mark span {
+  color: var(--gold);
+}
+.logo-sub {
+  font-size: 12px;
+  color: #fff;
+  margin-top: 6px;
+}
+.auth-switch {
+  text-align: center;
+  color: #fff;
+  font-size: 13px;
+  margin-top: 16px;
+}
+.auth-switch a {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* ---------- รายการงาน ---------- */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px 0;
+  font-size: 13px;
+}
+.tab {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--muted);
+}
+.tab.active {
+  background: var(--purple);
+  color: #fff;
+}
+.tab.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.tab.create {
+  margin-left: auto;
+  background: var(--accent);
+  color: #fff;
+}
+.searchbar {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px 4px;
+}
+.list {
+  display: grid;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px rgba(44, 31, 90, 0.08);
+  padding: 14px;
+}
+.job-card-top {
+  display: flex;
+  gap: 12px;
+}
+.avatar {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--purple);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 20px;
+}
+.avatar.big {
+  width: 84px;
+  height: 84px;
+  font-size: 32px;
+}
+.job-card-body {
+  min-width: 0;
+  flex: 1;
+}
+.job-card-body h3 {
   font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  color: var(--purple-dark);
+  margin-bottom: 4px;
+}
+.clamp {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.job-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.job-meta strong {
+  color: var(--purple-dark);
+  font-size: 14px;
+}
+.job-card-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.job-card-foot .btn {
+  margin-left: auto;
+}
+.badge {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #ece6ff;
+  color: var(--purple-dark);
+}
+
+/* ---------- รายละเอียด / โปรไฟล์ ---------- */
+.detail-hero {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 18px 16px 4px;
+  text-align: center;
+}
+.detail-hero h2 {
+  font-size: 18px;
+  color: var(--purple-dark);
+}
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+.pill {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+}
+.section {
+  padding: 0 16px;
+  margin-top: 14px;
+}
+.section h3 {
+  font-size: 14px;
+  color: var(--purple-dark);
+  margin-bottom: 6px;
+}
+.desc-box {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 14px;
+  min-height: 120px;
+  white-space: pre-wrap;
+  box-shadow: 0 2px 10px rgba(44, 31, 90, 0.08);
+}
+.actions {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+}
+.kv {
+  display: grid;
+  gap: 8px;
+}
+.kv > div {
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+.kv span {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+.ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.ledger li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.ledger small,
+.notif small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.plus {
+  color: var(--ok);
+}
+.minus {
+  color: var(--danger);
+}
+.notif {
+  display: grid;
+  gap: 4px;
+  border-left: 4px solid transparent;
+  font-size: 14px;
+}
+.notif.unread {
+  border-left-color: var(--accent);
 }
