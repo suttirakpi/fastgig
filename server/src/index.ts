@@ -6,7 +6,7 @@ import { config } from "./config";
 import authRouter from "./routes/auth";
 import jobsRouter from "./routes/jobs";
 import notificationsRouter from "./routes/notifications";
-
+import pointsRouter from "./routes/points";
 const app = express();
 
 app.use(helmet());
@@ -29,6 +29,8 @@ app.use("/api/auth", authLimiter, authRouter);
 
 app.use("/api/jobs", jobsRouter);
 app.use("/api/notifications", notificationsRouter);
+
+app.use("/api/points", pointsRouter);
 
 app.use((_req, res) => res.status(404).json({ message: "ไม่พบเส้นทางนี้" }));
 

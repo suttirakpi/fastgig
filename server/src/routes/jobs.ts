@@ -73,7 +73,15 @@ const decisionSchema = z.object({
   status: z.enum(["ACCEPTED", "REJECTED"]),
 });
 
-function parseId(value: string | undefined) {
+const completeSchema = z.object({
+  result: z.enum(["PASS", "FAIR", "FAIL"]),
+});
+
+const POINTS = { PASS: 10, FAIR: 5, FAIL: -5 } as const;
+const RESULT_LABEL = { PASS: "ผ่าน", FAIR: "พอใช้", FAIL: "ไม่ผ่าน" } as const;
+
+function parseId(value: string | string[] | undefined) {
+  if (typeof value !== "string") return null;
   const n = Number(value);
   return Number.isInteger(n) && n > 0 ? n : null;
 }
@@ -414,5 +422,88 @@ router.patch(
     }
   },
 );
+
+// ---------- จบงาน + ให้คะแนน Trust Points (เฉพาะเจ้าของงาน) ----------
+router.post("/:id/complete", async (req: AuthRequest, res) => {
+  const me = req.userId as number;
+  const jobId = parseId(req.params.id);
+  if (!jobId) return res.status(400).json({ message: "รหัสงานไม่ถูกต้อง" });
+
+  const parsed = completeSchema.safeParse(req.body);
+  if (!parsed.success) return badRequest(res, parsed.error.issues);
+  const { result } = parsed.data;
+
+  try {
+    const job = await prisma.job.findUnique({
+      where: { id: jobId },
+      include: { applications: { where: { status: "ACCEPTED" }, take: 1 } },
+    });
+    if (!job) return res.status(404).json({ message: "ไม่พบงานนี้" });
+    if (job.employerId !== me) {
+      return res.status(403).json({ message: "ไม่มีสิทธิ์จบงานนี้" });
+    }
+    if (job.status !== "IN_PROGRESS") {
+      return res
+        .status(409)
+        .json({ message: "งานนี้ไม่ได้อยู่ระหว่างดำเนินการ หรือจบไปแล้ว" });
+    }
+    const accepted = job.applications[0];
+    if (!accepted) {
+      return res
+        .status(409)
+        .json({ message: "ยังไม่มีผู้ทำงานที่ได้รับเลือก" });
+    }
+
+    const outcome = await prisma.$transaction(async (tx) => {
+      // กันกดซ้ำ/กดพร้อมกัน: เปลี่ยนสถานะได้ครั้งเดียว
+      const closed = await tx.job.updateMany({
+        where: { id: jobId, status: "IN_PROGRESS" },
+        data: { status: "COMPLETED" },
+      });
+      if (closed.count === 0) throw new Error("JOB_NOT_IN_PROGRESS");
+
+      await tx.application.update({
+        where: { id: accepted.id },
+        data: { status: "COMPLETED", result },
+      });
+
+      const worker = await tx.user.findUniqueOrThrow({
+        where: { id: accepted.userId },
+        select: { trustPoints: true },
+      });
+      const newTotal = Math.max(0, worker.trustPoints + POINTS[result]);
+      const delta = newTotal - worker.trustPoints;
+
+      await tx.user.update({
+        where: { id: accepted.userId },
+        data: { trustPoints: newTotal, completedJobs: { increment: 1 } },
+      });
+      await tx.pointsLedger.create({
+        data: {
+          userId: accepted.userId,
+          applicationId: accepted.id,
+          points: delta,
+          reason: `${RESULT_LABEL[result]}: ${job.title}`.slice(0, 100),
+        },
+      });
+      await tx.notification.create({
+        data: {
+          userId: accepted.userId,
+          type: "JOB_COMPLETED",
+          content: `งาน "${job.title}" เสร็จสิ้น ผลประเมิน: ${RESULT_LABEL[result]} (${delta >= 0 ? "+" : ""}${delta} คะแนน)`,
+        },
+      });
+
+      return { trustPoints: newTotal, pointsChange: delta };
+    });
+
+    return res.json({ jobId, result, ...outcome });
+  } catch (err) {
+    if (err instanceof Error && err.message === "JOB_NOT_IN_PROGRESS") {
+      return res.status(409).json({ message: "งานนี้จบไปแล้ว" });
+    }
+    return serverError(res, err);
+  }
+});
 
 export default router;
