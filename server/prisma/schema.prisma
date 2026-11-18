@@ -13,3 +13,118 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+enum JobStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COMPLETED
+}
+
+// ผลประเมินหลังจบงาน: PASS +10, FAIR +5, FAIL -5
+enum WorkResult {
+  PASS
+  FAIR
+  FAIL
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  username       String   @unique @db.VarChar(50)
+  email          String   @unique @db.VarChar(120)
+  passwordHash   String   @db.VarChar(255)
+  phone          String?  @db.VarChar(20)
+  age            Int?
+  skills         String?  @db.Text
+  profileImage   String?  @db.VarChar(255)
+  trustPoints    Int      @default(0)
+  completedJobs  Int      @default(0)
+  latitude       Float?
+  longitude      Float?
+  skillEmbedding Json?
+  createdAt      DateTime @default(now())
+
+  jobs          Job[]
+  applications  Application[]
+  notifications Notification[]
+  ledger        PointsLedger[]
+
+  @@map("users")
+}
+
+model Job {
+  id           Int       @id @default(autoincrement())
+  employerId   Int
+  title        String    @db.VarChar(150)
+  description  String    @db.Text
+  category     String?   @db.VarChar(50)
+  payMin       Int
+  payMax       Int
+  locationText String?   @db.VarChar(255)
+  latitude     Float?
+  longitude    Float?
+  ageMin       Int?
+  ageMax       Int?
+  status       JobStatus @default(OPEN)
+  embedding    Json?
+  createdAt    DateTime  @default(now())
+
+  employer     User          @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  applications Application[]
+
+  @@index([status, createdAt])
+  @@index([category])
+  @@map("jobs")
+}
+
+model Application {
+  id        Int               @id @default(autoincrement())
+  jobId     Int
+  userId    Int
+  status    ApplicationStatus @default(PENDING)
+  result    WorkResult?
+  appliedAt DateTime          @default(now())
+
+  job    Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user   User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ledger PointsLedger[]
+
+  @@unique([jobId, userId])
+  @@map("applications")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  type      String   @db.VarChar(40)
+  content   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+model PointsLedger {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  applicationId Int?
+  points        Int
+  reason        String   @db.VarChar(100)
+  createdAt     DateTime @default(now())
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@map("points_ledger")
+}

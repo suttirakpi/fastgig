@@ -1,0 +1,16 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: fastgig-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: fastgig
+      MYSQL_USER: fastgig
+      MYSQL_PASSWORD: fastgigpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+volumes:
+  dbdata:
