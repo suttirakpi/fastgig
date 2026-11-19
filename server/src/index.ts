@@ -6,6 +6,7 @@ import { config } from "./config";
 import authRouter from "./routes/auth";
 import jobsRouter from "./routes/jobs";
 import notificationsRouter from "./routes/notifications";
+import dashboardRouter from "./routes/dashboard";
 import pointsRouter from "./routes/points";
 const app = express();
 
@@ -33,7 +34,7 @@ app.use("/api/notifications", notificationsRouter);
 app.use("/api/points", pointsRouter);
 
 app.use((_req, res) => res.status(404).json({ message: "ไม่พบเส้นทางนี้" }));
-
+app.use("/api/dashboard", dashboardRouter);
 app.listen(config.port, () => {
   console.log(`API running on http://localhost:${config.port}`);
 });

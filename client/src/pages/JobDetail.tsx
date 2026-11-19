@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { api, errorMessage } from "../lib/api";
 import { useAuth } from "../lib/auth";
@@ -64,9 +64,9 @@ export default function JobDetail() {
           <div className="actions">
             {actionError && <div className="alert">{actionError}</div>}
             {job.employerId === user?.id ? (
-              <div className="notice">
-                นี่คืองานที่คุณลงเอง (หน้าจัดการผู้สมัครจะเพิ่มในขั้นถัดไป)
-              </div>
+              <Link className="btn btn-block" to={`/jobs/${job.id}/applicants`}>
+                จัดการผู้สมัคร / จบงาน
+              </Link>
             ) : job.myApplication ? (
               <div className="notice">
                 สถานะการสมัคร:{" "}

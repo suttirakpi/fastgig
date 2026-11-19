@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { Link } from "react-router-dom";
+import HomeTabs from "../components/HomeTabs";
 import JobCard from "../components/JobCard";
 import PageHeader from "../components/PageHeader";
 import { useGet } from "../lib/useGet";
@@ -31,15 +31,7 @@ export default function Home() {
           </button>
         }
       />
-      <div className="tabs">
-        <span className="tab active">งานทั้งหมด</span>
-        <span className="tab disabled" title="เร็ว ๆ นี้">
-          AI Match
-        </span>
-        <Link className="tab create" to="/jobs/new">
-          + สร้างงาน
-        </Link>
-      </div>
+      <HomeTabs />
       <form className="searchbar" onSubmit={onSearch}>
         <input
           className="input"

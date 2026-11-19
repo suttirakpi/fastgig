@@ -474,3 +474,144 @@ textarea.input {
 .notif.unread {
   border-left-color: var(--accent);
 }
+
+/* ---------- History / Applicants ---------- */
+.btn-outline {
+  background: transparent;
+  color: var(--purple);
+  border: 1.5px solid var(--purple);
+}
+.btn-ok {
+  background: var(--ok);
+}
+.btn-warn {
+  background: #f5a623;
+}
+.btn-danger {
+  background: var(--danger);
+}
+button.tab {
+  border: 0;
+  cursor: pointer;
+}
+.badge.ok {
+  background: #dff5e8;
+  color: #14753c;
+}
+.badge.warn {
+  background: #fff1d6;
+  color: #8a5a00;
+}
+.badge.bad {
+  background: #fde1e1;
+  color: #b42318;
+}
+.notice.ok {
+  background: #dff5e8;
+  color: #14753c;
+}
+.pills.left {
+  justify-content: flex-start;
+  margin: 4px 0;
+}
+.card-title {
+  font-size: 15px;
+  color: var(--purple-dark);
+  margin-bottom: 4px;
+}
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.card-actions .btn:first-of-type {
+  margin-left: auto;
+}
+.applicant-foot {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}
+.applicant-foot .card-actions {
+  margin-top: 0;
+}
+.applicant-actions {
+  display: flex;
+  gap: 8px;
+}
+.applicant-actions .btn {
+  flex: 1;
+}
+.rate-title {
+  font-size: 12px;
+  color: var(--muted);
+}
+.rate-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+/* ---------- Dashboard ---------- */
+.tabs {
+  flex-wrap: wrap;
+}
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.stat-grid.three {
+  grid-template-columns: repeat(3, 1fr);
+}
+.stat {
+  display: grid;
+  gap: 2px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--purple);
+  color: #fff;
+}
+.stat strong {
+  font-size: 26px;
+  line-height: 1.1;
+}
+.stat span {
+  font-size: 12px;
+  opacity: 0.9;
+}
+.stat.blue {
+  background: #2f6bed;
+}
+.stat.green {
+  background: var(--ok);
+}
+.stat.orange {
+  background: #f5a623;
+}
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  font-size: 14px;
+}
+.stat-row.open {
+  border-color: #2f6bed;
+  color: #2f6bed;
+}
+.stat-row.progress {
+  border-color: #f5a623;
+  color: #b36b00;
+}
+.stat-row.done {
+  border-color: var(--ok);
+  color: var(--ok);
+}

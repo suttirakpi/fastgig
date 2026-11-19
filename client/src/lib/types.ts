@@ -58,3 +58,62 @@ export interface PointsSummary {
   level: string;
   entries: { id: number; points: number; reason: string; createdAt: string }[];
 }
+
+export type WorkResult = "PASS" | "FAIR" | "FAIL";
+
+export interface MyJob extends Job {
+  pendingApplicants: number;
+}
+
+export interface AppliedItem {
+  id: number;
+  status: ApplicationStatus;
+  result: WorkResult | null;
+  appliedAt: string;
+  job: Job;
+}
+
+export interface Applicant {
+  id: number;
+  status: ApplicationStatus;
+  result: WorkResult | null;
+  appliedAt: string;
+  user: {
+    id: number;
+    username: string;
+    age: number | null;
+    skills: string | null;
+    profileImage: string | null;
+    trustPoints: number;
+    completedJobs: number;
+  };
+}
+
+export interface DashboardData {
+  platform: {
+    total: number;
+    users: number;
+    OPEN: number;
+    IN_PROGRESS: number;
+    COMPLETED: number;
+    CANCELLED: number;
+  };
+  mine: {
+    posted: {
+      total: number;
+      OPEN: number;
+      IN_PROGRESS: number;
+      COMPLETED: number;
+      CANCELLED: number;
+    };
+    applications: {
+      total: number;
+      PENDING: number;
+      ACCEPTED: number;
+      REJECTED: number;
+      COMPLETED: number;
+    };
+    trustPoints: number;
+    completedJobs: number;
+  };
+}
