@@ -39,6 +39,7 @@ app.use("/api/notifications", notificationsRouter);
 app.use("/api/points", pointsRouter);
 app.use("/api/dashboard", dashboardRouter);
 app.use("/api/users", usersRouter);
+
 app.use((_req, res) => res.status(404).json({ message: "ไม่พบเส้นทางนี้" }));
 
 app.listen(config.port, () => {
