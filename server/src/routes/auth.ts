@@ -5,23 +5,10 @@ import { z } from "zod";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma";
 import { config } from "../config";
+import { publicUserSelect } from "../lib/userSelect";
 import { requireAuth, type AuthRequest } from "../middleware/auth";
 
 const router = Router();
-
-// field ที่ส่งกลับให้ client (ไม่มี passwordHash)
-const publicUserSelect = {
-  id: true,
-  username: true,
-  email: true,
-  phone: true,
-  age: true,
-  skills: true,
-  profileImage: true,
-  trustPoints: true,
-  completedJobs: true,
-  createdAt: true,
-} as const;
 
 const registerSchema = z
   .object({

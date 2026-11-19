@@ -6,6 +6,7 @@ import { useAuth } from "../lib/auth";
 import { APPLICATION_LABEL, formatAge, formatPay } from "../lib/format";
 import { useGet } from "../lib/useGet";
 import type { Job } from "../lib/types";
+import Avatar from "../components/Avatar";
 
 export default function JobDetail() {
   const { id } = useParams();
@@ -39,9 +40,11 @@ export default function JobDetail() {
       {job && (
         <>
           <div className="detail-hero">
-            <div className="avatar big">
-              {(job.employer?.username ?? "?").charAt(0).toUpperCase()}
-            </div>
+            <Avatar
+              name={job.employer?.username ?? "?"}
+              src={job.employer?.profileImage}
+              big
+            />
             <div className="muted">ผู้ลงงาน: {job.employer?.username}</div>
             <h2>{job.title}</h2>
             <div className="pills">

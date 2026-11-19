@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import { APPLICATION_LABEL, formatAge, formatPay } from "../lib/format";
 import type { Job } from "../lib/types";
+import Avatar from "../components/Avatar";
 
 export default function JobCard({ job }: { job: Job }) {
   const name = job.employer?.username ?? "";
   return (
     <article className="card">
       <div className="job-card-top">
-        <div className="avatar">{name.charAt(0).toUpperCase() || "?"}</div>
+        <Avatar name={name} src={job.employer?.profileImage} />
         <div className="job-card-body">
           <h3>{job.title}</h3>
           <p className="clamp">{job.description}</p>

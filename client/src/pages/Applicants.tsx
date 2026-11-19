@@ -14,6 +14,7 @@ import {
 } from "../lib/format";
 import { useGet } from "../lib/useGet";
 import type { Applicant, Job, WorkResult } from "../lib/types";
+import Avatar from "../components/Avatar";
 
 const RATINGS: { value: WorkResult; className: string }[] = [
   { value: "PASS", className: "btn btn-small btn-ok" },
@@ -122,9 +123,7 @@ export default function Applicants() {
         {applicants.map((a) => (
           <article className="card" key={a.id}>
             <div className="job-card-top">
-              <div className="avatar">
-                {a.user.username.charAt(0).toUpperCase()}
-              </div>
+              <Avatar name={a.user.username} src={a.user.profileImage} />
               <div className="job-card-body">
                 <h3>{a.user.username}</h3>
                 <div className="pills left">

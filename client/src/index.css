@@ -615,3 +615,20 @@ button.tab {
   border-color: var(--ok);
   color: var(--ok);
 }
+
+/* ---------- รูปโปรไฟล์ ---------- */
+.avatar {
+  overflow: hidden;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photo-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}

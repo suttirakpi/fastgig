@@ -11,6 +11,7 @@ import {
 } from "../lib/format";
 import { useGet } from "../lib/useGet";
 import type { AppliedItem, MyJob } from "../lib/types";
+import Avatar from "../components/Avatar";
 
 function FindJobsTab() {
   const { data, error, loading } = useGet<{ applications: AppliedItem[] }>(
@@ -27,9 +28,10 @@ function FindJobsTab() {
       {data?.applications.map((a) => (
         <article className="card" key={a.id}>
           <div className="job-card-top">
-            <div className="avatar">
-              {(a.job.employer?.username ?? "?").charAt(0).toUpperCase()}
-            </div>
+            <Avatar
+              name={a.job.employer?.username ?? "?"}
+              src={a.job.employer?.profileImage}
+            />
             <div className="job-card-body">
               <h3>{a.job.title}</h3>
               <p className="clamp">{a.job.description}</p>
