@@ -117,3 +117,43 @@ export interface DashboardData {
     completedJobs: number;
   };
 }
+
+export interface MatchInfo {
+  score: number;
+  semantic: number;
+  category: number;
+  distance: number;
+  distanceKm: number | null;
+}
+
+export interface MatchedJob extends Job {
+  match: MatchInfo;
+}
+
+export interface MatchResponse {
+  jobs: MatchedJob[];
+  engine: "embedding" | "keyword" | "no-profile";
+  modelStatus: "ready" | "loading" | "unavailable";
+  hasProfile: boolean;
+  usedLocation: boolean;
+  weights: { semantic: number; category: number; distance: number };
+}
+
+export interface ChatJob {
+  id: number;
+  title: string;
+  description: string;
+  category: string | null;
+  payMin: number;
+  payMax: number;
+  locationText: string | null;
+  employer: string;
+}
+
+export interface ChatReply {
+  reply: string;
+  intent: string;
+  entities: { categories: string[]; location: string | null };
+  jobs: ChatJob[];
+  action: { type: "create_job"; category: string | null } | null;
+}

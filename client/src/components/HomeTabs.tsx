@@ -9,9 +9,9 @@ export default function HomeTabs() {
       <NavLink to="/" end className={tabClass}>
         งานทั้งหมด
       </NavLink>
-      <span className="tab disabled" title="เร็ว ๆ นี้">
+      <NavLink to="/ai-match" className={tabClass}>
         AI Match
-      </span>
+      </NavLink>
       <NavLink to="/dashboard" className={tabClass}>
         Dashboard
       </NavLink>

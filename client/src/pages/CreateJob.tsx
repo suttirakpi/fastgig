@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { api, errorMessage } from "../lib/api";
 import type { Job } from "../lib/types";
@@ -14,22 +14,36 @@ const CATEGORIES = [
   "อื่น ๆ",
 ];
 
-const empty = {
-  title: "",
-  description: "",
-  category: CATEGORIES[0],
-  locationText: "",
-  ageMin: "",
-  ageMax: "",
-  payMin: "",
-  payMax: "",
+type FormState = {
+  title: string;
+  description: string;
+  category: string;
+  locationText: string;
+  ageMin: string;
+  ageMax: string;
+  payMin: string;
+  payMax: string;
 };
-
-type FormState = typeof empty;
 
 export default function CreateJob() {
   const navigate = useNavigate();
-  const [form, setForm] = useState<FormState>(empty);
+  const [params] = useSearchParams();
+  const wanted = params.get("category") ?? "";
+
+  const [form, setForm] = useState<FormState>({
+    title: "",
+    description: "",
+    category: CATEGORIES.includes(wanted) ? wanted : CATEGORIES[0],
+    locationText: "",
+    ageMin: "",
+    ageMax: "",
+    payMin: "",
+    payMax: "",
+  });
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
+    null,
+  );
+  const [locating, setLocating] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -42,6 +56,29 @@ export default function CreateJob() {
     ) =>
       setForm((f) => ({ ...f, [key]: e.target.value }));
 
+  function locateMe() {
+    if (!navigator.geolocation) {
+      setError("เบราว์เซอร์นี้ไม่รองรับการระบุตำแหน่ง");
+      return;
+    }
+    setLocating(true);
+    setError("");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setCoords({
+          lat: Math.round(pos.coords.latitude * 1e5) / 1e5,
+          lng: Math.round(pos.coords.longitude * 1e5) / 1e5,
+        });
+        setLocating(false);
+      },
+      () => {
+        setError("อ่านตำแหน่งไม่ได้ ตรวจสอบว่าอนุญาตให้เว็บเข้าถึงตำแหน่งแล้ว");
+        setLocating(false);
+      },
+      { timeout: 10000 },
+    );
+  }
+
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
@@ -52,6 +89,8 @@ export default function CreateJob() {
         description: form.description,
         category: form.category,
         locationText: form.locationText || undefined,
+        latitude: coords?.lat,
+        longitude: coords?.lng,
         payMin: Number(form.payMin),
         payMax: Number(form.payMax),
         ageMin: form.ageMin ? Number(form.ageMin) : undefined,
@@ -117,6 +156,30 @@ export default function CreateJob() {
             value={form.locationText}
             onChange={set("locationText")}
           />
+          <div className="photo-actions">
+            <button
+              type="button"
+              className="btn btn-small btn-outline"
+              onClick={locateMe}
+              disabled={locating}
+            >
+              {locating
+                ? "กำลังหาตำแหน่ง..."
+                : "ใช้ตำแหน่งปัจจุบันเป็นที่ทำงาน"}
+            </button>
+            {coords && (
+              <button
+                type="button"
+                className="link-btn"
+                onClick={() => setCoords(null)}
+              >
+                บันทึกตำแหน่งแล้ว (ล้าง)
+              </button>
+            )}
+          </div>
+          <small className="muted">
+            กดตอนอยู่ที่สถานที่ทำงาน เพื่อให้ AI Match คำนวณระยะทางได้
+          </small>
         </div>
         <div className="field">
           <label>อายุ</label>

@@ -10,6 +10,10 @@ import dashboardRouter from "./routes/dashboard";
 import pointsRouter from "./routes/points";
 import usersRouter from "./routes/users";
 import { AVATAR_DIR, AVATAR_URL_PREFIX } from "./lib/uploads";
+import matchRouter from "./routes/match";
+import chatRouter from "./routes/chat";
+import { warmUp } from "./ai/embeddings";
+
 const app = express();
 
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
@@ -39,9 +43,12 @@ app.use("/api/notifications", notificationsRouter);
 app.use("/api/points", pointsRouter);
 app.use("/api/dashboard", dashboardRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/match", matchRouter);
+app.use("/api/chat", chatRouter);
 
 app.use((_req, res) => res.status(404).json({ message: "ไม่พบเส้นทางนี้" }));
 
 app.listen(config.port, () => {
   console.log(`API running on http://localhost:${config.port}`);
+  warmUp();
 });
