@@ -3,10 +3,10 @@ import {
   FlatList,
   RefreshControl,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from "react-native";
+import Text from "../../components/Text";
 import JobCard from "../../components/JobCard";
 import { ChipButton, Empty, ErrorBox, PageHeader } from "../../components/ui";
 import { useGet } from "../../lib/useGet";
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 15,
+    fontFamily: "Prompt_400Regular",
     color: colors.text,
   },
   list: { padding: 16, paddingBottom: 110 },

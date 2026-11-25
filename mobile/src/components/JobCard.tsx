@@ -1,5 +1,6 @@
 import { router } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
+import Text from "./Text";
 import { APPLICATION_LABEL, formatAge, formatPay } from "../lib/format";
 import { colors } from "../lib/theme";
 import type { Job } from "../lib/types";

@@ -5,10 +5,10 @@ import {
   Image,
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from "react-native";
+import Text from "./Text";
 import type { TextInputProps, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { assetUrl } from "../lib/api";
@@ -151,7 +151,11 @@ export function Avatar({
       ]}
     >
       <Text
-        style={{ color: colors.white, fontWeight: "700", fontSize: size * 0.4 }}
+        style={{
+          color: colors.white,
+          fontWeight: "700",
+          fontSize: size * 0.4,
+        }}
       >
         {name.charAt(0).toUpperCase() || "?"}
       </Text>
@@ -184,7 +188,13 @@ export function Badge({
           : colors.purpleDark;
   return (
     <View style={[styles.badge, { backgroundColor: bg }]}>
-      <Text style={{ color: fg, fontSize: 11, fontWeight: "600" }}>
+      <Text
+        style={{
+          color: fg,
+          fontSize: 11,
+          fontWeight: "600",
+        }}
+      >
         {label}
       </Text>
     </View>
@@ -194,7 +204,14 @@ export function Badge({
 export function ErrorBox({ message }: { message: string }) {
   return (
     <View style={styles.errorBox}>
-      <Text style={{ color: "#b42318", fontSize: 13 }}>{message}</Text>
+      <Text
+        style={{
+          color: "#b42318",
+          fontSize: 13,
+        }}
+      >
+        {message}
+      </Text>
     </View>
   );
 }
@@ -203,7 +220,11 @@ export function Notice({ message }: { message: string }) {
   return (
     <View style={styles.notice}>
       <Text
-        style={{ color: colors.purpleDark, fontSize: 14, textAlign: "center" }}
+        style={{
+          color: colors.purpleDark,
+          fontSize: 14,
+          textAlign: "center",
+        }}
       >
         {message}
       </Text>
@@ -240,7 +261,13 @@ export function Logo() {
           FAST<Text style={{ color: colors.gold }}>GIG</Text>
         </Text>
       </View>
-      <Text style={{ color: colors.white, fontSize: 12, marginTop: 6 }}>
+      <Text
+        style={{
+          color: colors.white,
+          fontSize: 12,
+          marginTop: 6,
+        }}
+      >
         Welcome to FASTGIG
       </Text>
     </View>
@@ -271,14 +298,22 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     flexShrink: 1,
   },
-  back: { color: colors.white, fontSize: 30, lineHeight: 30, marginTop: -4 },
+  back: {
+    color: colors.white,
+    fontSize: 30,
+    lineHeight: 30,
+    marginTop: -4,
+  },
   chip: {
     backgroundColor: colors.accent,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 5,
   },
-  chipText: { color: colors.white, fontSize: 12 },
+  chipText: {
+    color: colors.white,
+    fontSize: 12,
+  },
   btn: {
     backgroundColor: colors.accent,
     borderRadius: 10,
@@ -292,7 +327,12 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: colors.purple,
   },
-  btnText: { color: colors.white, fontWeight: "600", fontSize: 15 },
+  btnText: {
+    color: colors.white,
+    fontWeight: "600",
+    fontSize: 15,
+    fontFamily: "Prompt_400Regular",
+  },
   field: { gap: 4 },
   label: { fontSize: 13, fontWeight: "500", color: colors.purpleDark },
   input: {
@@ -303,6 +343,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 15,
+    fontFamily: "Prompt_400Regular",
     color: colors.text,
   },
   avatar: { backgroundColor: colors.purple, overflow: "hidden" },
