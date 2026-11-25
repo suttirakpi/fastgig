@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
+import { Platform } from "react-native";
 
 // ตั้งค่าใน mobile/.env.local  เช่น EXPO_PUBLIC_API_URL=http://192.168.1.50:3000/api
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:3000/api";
@@ -14,22 +15,59 @@ export function assetUrl(path: string | null | undefined): string | null {
 
 const TOKEN_KEY = "fastgig_token";
 
-// เก็บ token ไว้ในหน่วยความจำด้วย เพื่อไม่ต้องอ่าน SecureStore ทุก request
+// SecureStore ใช้ได้เฉพาะบนมือถือ ถ้าเปิดแอปในเบราว์เซอร์ใช้ localStorage แทน
+interface WebStorage {
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): void;
+  removeItem(key: string): void;
+}
+const webStorage =
+  (globalThis as unknown as { localStorage?: WebStorage }).localStorage ?? null;
+const isWeb = Platform.OS === "web";
+
+async function readToken(): Promise<string | null> {
+  return isWeb
+    ? (webStorage?.getItem(TOKEN_KEY) ?? null)
+    : SecureStore.getItemAsync(TOKEN_KEY);
+}
+async function writeToken(token: string): Promise<void> {
+  if (isWeb) webStorage?.setItem(TOKEN_KEY, token);
+  else await SecureStore.setItemAsync(TOKEN_KEY, token);
+}
+async function removeToken(): Promise<void> {
+  if (isWeb) webStorage?.removeItem(TOKEN_KEY);
+  else await SecureStore.deleteItemAsync(TOKEN_KEY);
+}
+
+// เก็บ token ไว้ในหน่วยความจำด้วย เพื่อไม่ต้องอ่านที่เก็บทุก request
 let memoryToken: string | null = null;
 let onUnauthorized: (() => void) | null = null;
 
 export const tokenStore = {
   async load(): Promise<string | null> {
-    memoryToken = await SecureStore.getItemAsync(TOKEN_KEY);
+    try {
+      memoryToken = await readToken();
+    } catch (err) {
+      console.warn("อ่าน token ไม่สำเร็จ", err);
+      memoryToken = null;
+    }
     return memoryToken;
   },
   async set(token: string) {
     memoryToken = token;
-    await SecureStore.setItemAsync(TOKEN_KEY, token);
+    try {
+      await writeToken(token);
+    } catch (err) {
+      console.warn("บันทึก token ไม่สำเร็จ (ยังใช้งานได้จนกว่าจะปิดแอป)", err);
+    }
   },
   async clear() {
     memoryToken = null;
-    await SecureStore.deleteItemAsync(TOKEN_KEY);
+    try {
+      await removeToken();
+    } catch (err) {
+      console.warn("ลบ token ไม่สำเร็จ", err);
+    }
   },
   get: () => memoryToken,
 };

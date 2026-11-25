@@ -12,6 +12,7 @@ import { api } from "../../lib/api";
 import { formatDateTime } from "../../lib/format";
 import { colors } from "../../lib/theme";
 import { useGet } from "../../lib/useGet";
+import { useRefreshOnFocus } from "../../lib/useRefreshOnFocus";
 
 interface NotificationItem {
   id: number;
@@ -26,6 +27,7 @@ export default function Notifications() {
     notifications: NotificationItem[];
     unread: number;
   }>("/notifications");
+  useRefreshOnFocus(reload);
   const [pulling, setPulling] = useState(false);
 
   async function markAllRead() {

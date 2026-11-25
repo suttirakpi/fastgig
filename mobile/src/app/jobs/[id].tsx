@@ -87,7 +87,10 @@ export default function JobDetail() {
 
             {actionError ? <ErrorBox message={actionError} /> : null}
             {job.employerId === user?.id ? (
-              <Notice message="นี่คืองานที่คุณลงเอง (หน้าจัดการผู้สมัครจะเพิ่มในขั้นถัดไป)" />
+              <Button
+                label="จัดการผู้สมัคร / จบงาน"
+                onPress={() => router.push(`/jobs/applicants/${job.id}`)}
+              />
             ) : job.myApplication ? (
               <View style={{ alignItems: "center", gap: 6 }}>
                 <Text style={styles.muted}>สถานะการสมัคร</Text>

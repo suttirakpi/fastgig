@@ -43,3 +43,33 @@ export interface Job {
   employer?: Employer;
   myApplication?: { id: number; status: ApplicationStatus } | null;
 }
+
+export type WorkResult = "PASS" | "FAIR" | "FAIL";
+
+export interface MyJob extends Job {
+  pendingApplicants: number;
+}
+
+export interface AppliedItem {
+  id: number;
+  status: ApplicationStatus;
+  result: WorkResult | null;
+  appliedAt: string;
+  job: Job;
+}
+
+export interface Applicant {
+  id: number;
+  status: ApplicationStatus;
+  result: WorkResult | null;
+  appliedAt: string;
+  user: {
+    id: number;
+    username: string;
+    age: number | null;
+    skills: string | null;
+    profileImage: string | null;
+    trustPoints: number;
+    completedJobs: number;
+  };
+}

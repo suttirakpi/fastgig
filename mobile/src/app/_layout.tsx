@@ -41,6 +41,8 @@ function RootStack() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Protected guard={loggedIn}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="jobs/new" />
+        <Stack.Screen name="jobs/applicants/[id]" />
         <Stack.Screen name="jobs/[id]" />
       </Stack.Protected>
       <Stack.Protected guard={!loggedIn}>

@@ -113,6 +113,7 @@ export function Button({
 export function Field({
   label,
   light = false,
+  style,
   ...input
 }: { label: string; light?: boolean } & TextInputProps) {
   return (
@@ -121,7 +122,7 @@ export function Field({
         {label}
       </Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, style]}
         placeholderTextColor={colors.muted}
         autoCapitalize="none"
         {...input}

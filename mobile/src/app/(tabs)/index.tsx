@@ -1,6 +1,8 @@
+import { router } from "expo-router";
 import { useState } from "react";
 import {
   FlatList,
+  Pressable,
   RefreshControl,
   StyleSheet,
   TextInput,
@@ -10,6 +12,7 @@ import Text from "../../components/Text";
 import JobCard from "../../components/JobCard";
 import { ChipButton, Empty, ErrorBox, PageHeader } from "../../components/ui";
 import { useGet } from "../../lib/useGet";
+import { useRefreshOnFocus } from "../../lib/useRefreshOnFocus";
 import { colors } from "../../lib/theme";
 import type { Job } from "../../lib/types";
 
@@ -23,6 +26,7 @@ export default function Home() {
   }>("/jobs", {
     q: q || undefined,
   });
+  useRefreshOnFocus(reload);
 
   async function onRefresh() {
     setPulling(true);
@@ -40,6 +44,12 @@ export default function Home() {
         <Text style={[styles.tab, styles.tabActive]}>งานทั้งหมด</Text>
         <Text style={[styles.tab, styles.tabOff]}>AI Match</Text>
         <Text style={[styles.tab, styles.tabOff]}>Dashboard</Text>
+        <Pressable
+          style={styles.create}
+          onPress={() => router.push("/jobs/new")}
+        >
+          <Text style={styles.createText}>+ สร้างงาน</Text>
+        </Pressable>
       </View>
       <View style={styles.search}>
         <TextInput
@@ -80,7 +90,14 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
-  tabs: { flexDirection: "row", gap: 6, paddingHorizontal: 16, paddingTop: 12 },
+  tabs: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 6,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+  },
   tab: {
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -90,6 +107,14 @@ const styles = StyleSheet.create({
   },
   tabActive: { backgroundColor: colors.purple, color: colors.white },
   tabOff: { backgroundColor: colors.white, color: colors.muted, opacity: 0.5 },
+  create: {
+    marginLeft: "auto",
+    backgroundColor: colors.accent,
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  createText: { color: colors.white, fontSize: 13 },
   search: { paddingHorizontal: 16, paddingTop: 12 },
   input: {
     backgroundColor: colors.white,
