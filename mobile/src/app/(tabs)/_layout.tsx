@@ -52,6 +52,7 @@ export default function TabsLayout() {
         name="notifications"
         options={{ title: "แจ้งเตือน", tabBarIcon: tabIcon("bell") }}
       />
+      <Tabs.Screen name="dashboard" options={{ href: null }} />
     </Tabs>
   );
 }

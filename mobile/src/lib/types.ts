@@ -73,3 +73,39 @@ export interface Applicant {
     completedJobs: number;
   };
 }
+
+export interface DashboardData {
+  platform: {
+    total: number;
+    users: number;
+    OPEN: number;
+    IN_PROGRESS: number;
+    COMPLETED: number;
+    CANCELLED: number;
+  };
+  mine: {
+    posted: {
+      total: number;
+      OPEN: number;
+      IN_PROGRESS: number;
+      COMPLETED: number;
+      CANCELLED: number;
+    };
+    applications: {
+      total: number;
+      PENDING: number;
+      ACCEPTED: number;
+      REJECTED: number;
+      COMPLETED: number;
+    };
+    trustPoints: number;
+    completedJobs: number;
+  };
+}
+
+export interface PointsSummary {
+  trustPoints: number;
+  completedJobs: number;
+  level: string;
+  entries: { id: number; points: number; reason: string; createdAt: string }[];
+}

@@ -1,14 +1,12 @@
-import { router } from "expo-router";
 import { useState } from "react";
 import {
   FlatList,
-  Pressable,
   RefreshControl,
   StyleSheet,
   TextInput,
   View,
 } from "react-native";
-import Text from "../../components/Text";
+import HomeTabs from "../../components/HomeTabs";
 import JobCard from "../../components/JobCard";
 import { ChipButton, Empty, ErrorBox, PageHeader } from "../../components/ui";
 import { useGet } from "../../lib/useGet";
@@ -40,17 +38,7 @@ export default function Home() {
         title="งานทั้งหมด"
         action={<ChipButton label="Refresh" onPress={() => void reload()} />}
       />
-      <View style={styles.tabs}>
-        <Text style={[styles.tab, styles.tabActive]}>งานทั้งหมด</Text>
-        <Text style={[styles.tab, styles.tabOff]}>AI Match</Text>
-        <Text style={[styles.tab, styles.tabOff]}>Dashboard</Text>
-        <Pressable
-          style={styles.create}
-          onPress={() => router.push("/jobs/new")}
-        >
-          <Text style={styles.createText}>+ สร้างงาน</Text>
-        </Pressable>
-      </View>
+      <HomeTabs active="jobs" />
       <View style={styles.search}>
         <TextInput
           style={styles.input}
@@ -90,31 +78,6 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
-  tabs: {
-    flexDirection: "row",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: 6,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-  },
-  tab: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 999,
-    fontSize: 13,
-    overflow: "hidden",
-  },
-  tabActive: { backgroundColor: colors.purple, color: colors.white },
-  tabOff: { backgroundColor: colors.white, color: colors.muted, opacity: 0.5 },
-  create: {
-    marginLeft: "auto",
-    backgroundColor: colors.accent,
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  createText: { color: colors.white, fontSize: 13 },
   search: { paddingHorizontal: 16, paddingTop: 12 },
   input: {
     backgroundColor: colors.white,
